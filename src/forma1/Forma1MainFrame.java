@@ -118,8 +118,8 @@ public class Forma1MainFrame {
 			}
 		});
 		lblSelectedNation.setText("Mind");
-		lblRowCount.setText(table.getRowCount() + "");
-
+		countTableRows();
+// enable sort
 		table.setAutoCreateRowSorter(true);
 	}
 
@@ -140,7 +140,7 @@ public class Forma1MainFrame {
 			tableData[i][3] = pilots.get(i).getNation();
 			tableData[i][4] = new ImageIcon(this.getClass().getResource("/flag_brit.png"));
 		}
-		// lblRowCount.setText(table.getRowCount()+"");
+
 	}
 
 	private void createRowsByFilter(String nation) {
@@ -159,6 +159,10 @@ public class Forma1MainFrame {
 				tableModel.addRow(row);
 			}
 		}
+		countTableRows();
+	}
+
+	private void countTableRows() {
 		lblRowCount.setText(table.getRowCount() + "");
 	}
 
