@@ -18,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.JCheckBox;
 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
@@ -121,6 +122,18 @@ public class Forma1MainFrame {
 		countTableRows();
 // enable sort
 		table.setAutoCreateRowSorter(true);
+		
+		JCheckBox chckbxWithStartNum = new JCheckBox("Csak rajtszámmal");
+		chckbxWithStartNum.setBounds(325, 648, 231, 23);
+		
+		 chckbxWithStartNum.addItemListener(new ItemListener() {
+	         public void itemStateChanged(ItemEvent e) {
+//System.out.println(e.getStateChange()==1);
+
+	        	 filterBystartNum(e.getStateChange()==1);
+	         }
+	      });
+		frame.getContentPane().add(chckbxWithStartNum);
 	}
 
 	public int removeAllRows() {
@@ -132,13 +145,22 @@ public class Forma1MainFrame {
 		return dm.getRowCount();
 	}
 
+	private void createOneRow(Pilota  pilota) {
+		Object[] row = new Object[5];
+		row[0] = pilota.getName();
+		row[1] = pilota.getDateOfBirth();
+		row[2] = pilota.getStartNum();
+		row[3] = pilota.getNation();
+		row[4] = new ImageIcon(this.getClass().getResource(selectFlagByNation(pilota.getNation())));
+		tableModel.addRow(row);
+	}
 	private void createRows() {
 		for (int i = 0; i < pilots.size(); i++) {
 			tableData[i][0] = pilots.get(i).getName();
 			tableData[i][1] = pilots.get(i).getDateOfBirth();
 			tableData[i][2] = pilots.get(i).getStartNum();
 			tableData[i][3] = pilots.get(i).getNation();
-			tableData[i][4] = new ImageIcon(this.getClass().getResource("/flag_brit.png"));
+			tableData[i][4] = new ImageIcon(this.getClass().getResource(selectFlagByNation(pilots.get(i).getNation())));
 		}
 
 	}
@@ -148,17 +170,36 @@ public class Forma1MainFrame {
 		if (nation.equals("Mind")) {
 			nation = "";
 		}
-		Object[] row = new Object[5];
+		
 		for (int i = 0; i < pilots.size(); i++) {
 			if (pilots.get(i).getNation().contains(nation.toLowerCase())) {
-				row[0] = pilots.get(i).getName();
-				row[1] = pilots.get(i).getDateOfBirth();
-				row[2] = pilots.get(i).getStartNum();
-				row[3] = pilots.get(i).getNation();
-				row[4] = new ImageIcon(this.getClass().getResource("/flag_brit.png"));
-				tableModel.addRow(row);
+				createOneRow(pilots.get(i));
 			}
 		}
+		countTableRows();
+	}
+	private void filterBystartNum(boolean withStartNum) {
+		removeAllRows();
+		String nation = (lblSelectedNation.getText().equalsIgnoreCase("Mind"))?"":lblSelectedNation.getText();
+		if(withStartNum) {
+			
+				for (int i = 0; i < pilots.size(); i++) {
+					if (pilots.get(i).getNation().contains(nation.toLowerCase())&&pilots.get(i).getStartNum()!=null) {
+						createOneRow(pilots.get(i));
+					}
+				}		
+
+			} else {
+				for (int i = 0; i < pilots.size(); i++) {
+					
+					
+					
+					if (pilots.get(i).getNation().contains(nation.toLowerCase())) {
+						createOneRow(pilots.get(i));
+					}
+				}		
+			}
+
 		countTableRows();
 	}
 
@@ -171,5 +212,25 @@ public class Forma1MainFrame {
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 
+	}
+	
+	private String selectFlagByNation(String nation) {
+		
+		//System.out.println(nation);
+		String url ="";
+		switch(nation.toLowerCase()) {
+		case "brit":
+			url="/flag_brit.png";
+			break;
+		case "német":
+			url="/flag_nemet.png";
+			break;
+		case "olasz":
+			url="/flag_olasz.png";
+			break;
+		default : 
+			url="/";
+		};
+		return url;
 	}
 }
