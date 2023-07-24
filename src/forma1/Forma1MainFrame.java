@@ -27,6 +27,8 @@ public class Forma1MainFrame {
 	private JFrame frame;
 	private JTable table;
 	private final JComboBox comboBox = new JComboBox();
+	private JLabel lblRowCount;
+	private JLabel lblSelectedNation;
 
 	/**
 	 * Launch the application.
@@ -62,8 +64,8 @@ public class Forma1MainFrame {
 		frame.setBounds(100, 100, 885, 743);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		createRows();
 
+		createRows();
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 818, 584);
 		frame.getContentPane().add(scrollPane);
@@ -87,19 +89,38 @@ public class Forma1MainFrame {
 		table.setRowHeight(40);
 
 		comboBox.setToolTipText("Nemzetiség");
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Mind", "Brit", "Német", "Olasz"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Mind", "Brit", "Német", "Olasz" }));
 		comboBox.setBounds(91, 644, 108, 30);
 		frame.getContentPane().add(comboBox);
+
+		JLabel lblNewLabel = new JLabel("A választott: ");
+		lblNewLabel.setBounds(65, 619, 88, 14);
+		frame.getContentPane().add(lblNewLabel);
+
+		lblSelectedNation = new JLabel("");
+		lblSelectedNation.setBounds(165, 619, 46, 14);
+		frame.getContentPane().add(lblSelectedNation);
+
+		JLabel lblRowCountText = new JLabel("A sorok száma: ");
+		lblRowCountText.setBounds(628, 606, 131, 30);
+		frame.getContentPane().add(lblRowCountText);
+
+		lblRowCount = new JLabel("");
+		lblRowCount.setBounds(769, 606, 59, 37);
+		frame.getContentPane().add(lblRowCount);
 
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == 1) {
-					System.out.println(e.getItem().toString().toLowerCase());
+					lblSelectedNation.setText(e.getItem().toString());
 					createRowsByFilter(e.getItem().toString());
 				}
 			}
 		});
+		lblSelectedNation.setText("Mind");
+		lblRowCount.setText(table.getRowCount() + "");
 
+		table.setAutoCreateRowSorter(true);
 	}
 
 	public int removeAllRows() {
@@ -119,11 +140,14 @@ public class Forma1MainFrame {
 			tableData[i][3] = pilots.get(i).getNation();
 			tableData[i][4] = new ImageIcon(this.getClass().getResource("/flag_brit.png"));
 		}
+		// lblRowCount.setText(table.getRowCount()+"");
 	}
 
 	private void createRowsByFilter(String nation) {
 		removeAllRows();
-		if(nation.equals("Mind")) {nation="";}
+		if (nation.equals("Mind")) {
+			nation = "";
+		}
 		Object[] row = new Object[5];
 		for (int i = 0; i < pilots.size(); i++) {
 			if (pilots.get(i).getNation().contains(nation.toLowerCase())) {
@@ -135,6 +159,7 @@ public class Forma1MainFrame {
 				tableModel.addRow(row);
 			}
 		}
+		lblRowCount.setText(table.getRowCount() + "");
 	}
 
 	private void firstColTextCenter() {
