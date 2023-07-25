@@ -26,6 +26,11 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
@@ -37,8 +42,6 @@ public class Forma1MainFrame {
 	private final JComboBox comboBox = new JComboBox();
 	private JLabel lblRowCount;
 	private JLabel lblSelectedNation;
-	private JButton btnStartNameWithH;
-	private JButton btnAllNames;
 
 	/**
 	 * Launch the application.
@@ -71,8 +74,14 @@ public class Forma1MainFrame {
 	 */
 	private void initialize() {
 		frame = new JFrame("Forma-1 pilóták");
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exit();
+			}
+		});
 		frame.setBounds(100, 100, 885, 743);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		createRows();
@@ -150,34 +159,55 @@ public class Forma1MainFrame {
 		});
 		lblSelectedNation.setText("Mind");
 		countTableRows();
-// enable sort
+
+		// enable sort
 		table.setAutoCreateRowSorter(true);
 
-		btnStartNameWithH = new JButton("H kezdetű nevek");
-		btnStartNameWithH.addActionListener(new ActionListener() {
+		createMenu();
+
+	}
+
+	private void createMenu() {
+
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+
+		JMenu mnTasks = new JMenu("Feladatok");
+		menuBar.add(mnTasks);
+
+		JMenuItem mntmNameStartsH = new JMenuItem("H betűs vezetéknevek");
+		mntmNameStartsH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nameStartWithH();
-				btnAllNames.setVisible(true);
-				btnStartNameWithH.setVisible(false);
 			}
 		});
-		btnStartNameWithH.setBounds(638, 648, 173, 23);
-		frame.getContentPane().add(btnStartNameWithH);
+		mnTasks.add(mntmNameStartsH);
 
-		btnAllNames = new JButton("Mind");
-		btnAllNames.setBounds(638, 648, 89, 23);
-		frame.getContentPane().add(btnAllNames);
-		btnAllNames.setVisible(false);
-		btnAllNames.addActionListener(new ActionListener() {
-
-			@Override
+		JMenuItem mntmAllPeople = new JMenuItem("Mindenki");
+		mntmAllPeople.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeAllRows();
 				createAllRow();
-				btnAllNames.setVisible(false);
-				btnStartNameWithH.setVisible(true);
 			}
 		});
+		mnTasks.add(mntmAllPeople);
+
+		JMenuItem mntmExit = new JMenuItem("Kilépés");
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				exit();
+			}
+		});
+		
+		JMenuItem mntmWriteCsv = new JMenuItem("csv írása");
+		mntmWriteCsv.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FileHandler.writeCsvIfCount(pilots);
+			}
+		});
+		mnTasks.add(mntmWriteCsv);
+		mnTasks.add(mntmExit);
 
 	}
 
@@ -273,5 +303,11 @@ public class Forma1MainFrame {
 			createOneRow(pilots.get(i));
 
 		}
+	}
+	
+	private void exit() {
+		if(JOptionPane.showConfirmDialog(frame, "Biztos kilép?", "Kilépés", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}		
 	}
 }
