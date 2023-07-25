@@ -3,33 +3,42 @@ package forma1;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Image;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import java.awt.event.ItemListener;
+
 import java.awt.event.ItemEvent;
 import javax.swing.JCheckBox;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
 	List<Pilota> pilots = new ArrayList<Pilota>();
-	String[] columnNames = { "Név", "Születédi idő", "Rajtszám", "Nemzetiség", "Zászló" };
+	String[] columnNames = { "Név", "Rajtszám", "Nemzetiség", "Zászló" };
 	Object[][] tableData;
 	private JFrame frame;
 	private JTable table;
 	private final JComboBox comboBox = new JComboBox();
 	private JLabel lblRowCount;
 	private JLabel lblSelectedNation;
+	private JButton btnStartNameWithH;
+	private JButton btnAllNames;
 
 	/**
 	 * Launch the application.
@@ -79,10 +88,31 @@ public class Forma1MainFrame {
 
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			public Class getColumnClass(int column) {
-				return (column == 4) ? Icon.class : Object.class;
+				return (column == 3) ? Icon.class : Object.class;
 			}
 		};
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setToolTipText("Pilóták");
+
+		ListSelectionModel select = table.getSelectionModel();
+		select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		select.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+
+					StringBuilder row = new StringBuilder();
+					row.append("Név: " + table.getModel().getValueAt(table.getSelectedRow(), 0).toString() + " ");
+					row.append("rajtszám: " + table.getModel().getValueAt(table.getSelectedRow(), 1).toString() + " ");
+
+					row.append("országkód: " + table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+
+					JOptionPane.showMessageDialog(frame, row, "adatok", JOptionPane.PLAIN_MESSAGE, null);
+				}
+			}
+		});
 
 		firstColTextCenter();
 		scrollPane.setViewportView(table);
@@ -90,7 +120,7 @@ public class Forma1MainFrame {
 		table.setRowHeight(40);
 
 		comboBox.setToolTipText("Nemzetiség");
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Mind", "Brit", "Német", "Olasz" }));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Mind", "GBR", "GER", "ITA " }));
 		comboBox.setBounds(91, 644, 108, 30);
 		frame.getContentPane().add(comboBox);
 
@@ -122,18 +152,33 @@ public class Forma1MainFrame {
 		countTableRows();
 // enable sort
 		table.setAutoCreateRowSorter(true);
-		
-		JCheckBox chckbxWithStartNum = new JCheckBox("Csak rajtszámmal");
-		chckbxWithStartNum.setBounds(325, 648, 231, 23);
-		
-		 chckbxWithStartNum.addItemListener(new ItemListener() {
-	         public void itemStateChanged(ItemEvent e) {
-//System.out.println(e.getStateChange()==1);
 
-	        	 filterBystartNum(e.getStateChange()==1);
-	         }
-	      });
-		frame.getContentPane().add(chckbxWithStartNum);
+		btnStartNameWithH = new JButton("H kezdetű nevek");
+		btnStartNameWithH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nameStartWithH();
+				btnAllNames.setVisible(true);
+				btnStartNameWithH.setVisible(false);
+			}
+		});
+		btnStartNameWithH.setBounds(638, 648, 173, 23);
+		frame.getContentPane().add(btnStartNameWithH);
+
+		btnAllNames = new JButton("Mind");
+		btnAllNames.setBounds(638, 648, 89, 23);
+		frame.getContentPane().add(btnAllNames);
+		btnAllNames.setVisible(false);
+		btnAllNames.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				removeAllRows();
+				createAllRow();
+				btnAllNames.setVisible(false);
+				btnStartNameWithH.setVisible(true);
+			}
+		});
+
 	}
 
 	public int removeAllRows() {
@@ -145,22 +190,25 @@ public class Forma1MainFrame {
 		return dm.getRowCount();
 	}
 
-	private void createOneRow(Pilota  pilota) {
-		Object[] row = new Object[5];
+	private void createOneRow(Pilota pilota) {
+		Object[] row = new Object[4];
 		row[0] = pilota.getName();
-		row[1] = pilota.getDateOfBirth();
-		row[2] = pilota.getStartNum();
-		row[3] = pilota.getNation();
-		row[4] = new ImageIcon(this.getClass().getResource(selectFlagByNation(pilota.getNation())));
+
+		row[1] = pilota.getStartNum();
+		row[2] = pilota.getNationCode();
+		row[3] = new ImageIcon(this.getClass().getResource(selectFlagByNation(pilota.getNationCode())));
 		tableModel.addRow(row);
 	}
+
 	private void createRows() {
+
 		for (int i = 0; i < pilots.size(); i++) {
 			tableData[i][0] = pilots.get(i).getName();
-			tableData[i][1] = pilots.get(i).getDateOfBirth();
-			tableData[i][2] = pilots.get(i).getStartNum();
-			tableData[i][3] = pilots.get(i).getNation();
-			tableData[i][4] = new ImageIcon(this.getClass().getResource(selectFlagByNation(pilots.get(i).getNation())));
+
+			tableData[i][1] = pilots.get(i).getStartNum();
+			tableData[i][2] = pilots.get(i).getNationCode();
+			tableData[i][3] = new ImageIcon(
+					this.getClass().getResource(selectFlagByNation(pilots.get(i).getNationCode())));
 		}
 
 	}
@@ -170,36 +218,12 @@ public class Forma1MainFrame {
 		if (nation.equals("Mind")) {
 			nation = "";
 		}
-		
+
 		for (int i = 0; i < pilots.size(); i++) {
-			if (pilots.get(i).getNation().contains(nation.toLowerCase())) {
+			if (pilots.get(i).getNationCode().contains(nation)) {
 				createOneRow(pilots.get(i));
 			}
 		}
-		countTableRows();
-	}
-	private void filterBystartNum(boolean withStartNum) {
-		removeAllRows();
-		String nation = (lblSelectedNation.getText().equalsIgnoreCase("Mind"))?"":lblSelectedNation.getText();
-		if(withStartNum) {
-			
-				for (int i = 0; i < pilots.size(); i++) {
-					if (pilots.get(i).getNation().contains(nation.toLowerCase())&&pilots.get(i).getStartNum()!=null) {
-						createOneRow(pilots.get(i));
-					}
-				}		
-
-			} else {
-				for (int i = 0; i < pilots.size(); i++) {
-					
-					
-					
-					if (pilots.get(i).getNation().contains(nation.toLowerCase())) {
-						createOneRow(pilots.get(i));
-					}
-				}		
-			}
-
 		countTableRows();
 	}
 
@@ -213,24 +237,41 @@ public class Forma1MainFrame {
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 
 	}
-	
+
 	private String selectFlagByNation(String nation) {
-		
-		//System.out.println(nation);
-		String url ="";
-		switch(nation.toLowerCase()) {
-		case "brit":
-			url="/flag_brit.png";
+
+		String url = "";
+		switch (nation) {
+		case "GBR":
+			url = "/flag_brit.png";
 			break;
-		case "német":
-			url="/flag_nemet.png";
+		case "GER":
+			url = "/flag_nemet.png";
 			break;
-		case "olasz":
-			url="/flag_olasz.png";
+		case "ITA":
+			url = "/flag_olasz.png";
 			break;
-		default : 
-			url="/";
-		};
+		default:
+			url = "/";
+		}
+		;
 		return url;
+	}
+
+	private void nameStartWithH() {
+		removeAllRows();
+		for (int i = 0; i < pilots.size(); i++) {
+			if (pilots.get(i).getName().split(" ")[1].startsWith("H")) {
+				createOneRow(pilots.get(i));
+			}
+		}
+	}
+
+	private void createAllRow() {
+		for (int i = 0; i < pilots.size(); i++) {
+
+			createOneRow(pilots.get(i));
+
+		}
 	}
 }

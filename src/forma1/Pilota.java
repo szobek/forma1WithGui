@@ -1,57 +1,27 @@
 package forma1;
 
-import java.time.LocalDate;
-
-
 public class Pilota {
-private String name;
-private LocalDate dateOfBirth;
-private String nation;
-private Integer startNum;
+	private String name;
 
+	private String nationCode;
+	private Integer startNum;
 
-public Pilota(String name, LocalDate dateOfBirth, String nation) {
-	super();
-	this.name = name;
-	this.dateOfBirth = dateOfBirth;
-	this.nation = nation;
-	this.startNum = null;
-}
+	public Pilota(int startNum,String nationCode,String name) {
+		this.name = name;
+		this.nationCode = nationCode;
+		this.startNum = startNum;
+	}
 
+	public String getName() {
+		return name;
+	}
 
+	public String getNationCode() {
+		return nationCode;
+	}
 
-public Pilota(String name, LocalDate dateOfBirth, String nation, int startNum) {
-	super();
-	this.name = name;
-	this.dateOfBirth = dateOfBirth;
-	this.nation = nation;
-	this.startNum = startNum;
-}
-
-
-
-public String getName() {
-	return name;
-}
-
-
-
-public LocalDate getDateOfBirth() {
-	return dateOfBirth;
-}
-
-
-
-public String getNation() {
-	return nation;
-}
-
-
-
-public Integer getStartNum() {
-	return startNum;
-}
-
-
+	public Integer getStartNum() {
+		return startNum;
+	}
 
 }
