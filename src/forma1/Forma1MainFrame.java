@@ -34,7 +34,7 @@ import java.awt.event.WindowEvent;
 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
-	List<Pilota> pilots = new ArrayList<Pilota>();
+	private List<Pilota> pilots = new ArrayList<Pilota>();
 	String[] columnNames = { "Név", "Rajtszám", "Nemzetiség", "Zászló" };
 	Object[][] tableData;
 	private JFrame frame;
@@ -278,6 +278,15 @@ public class Forma1MainFrame {
 		case "GER":
 			url = "/flag_nemet.png";
 			break;
+		case "BEL":
+			url = "/flag_belgium.png";
+			break;
+		case "AUS":
+			url = "/flag_austria.png";
+			break;
+		case "FIN":
+			url = "/flag_finnish.png";
+			break;
 		case "ITA":
 			url = "/flag_olasz.png";
 			break;
@@ -310,4 +319,17 @@ public class Forma1MainFrame {
 			System.exit(0);
 		}		
 	}
+	
+	// to tests
+	
+	
+	public String getFrameTitle() {
+		
+		return frame.getTitle();
+	}
+	
+	public int listSize() {
+		return pilots.size();
+	}
+	
 }
