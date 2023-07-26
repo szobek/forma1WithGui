@@ -74,6 +74,7 @@ public class Forma1MainFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		DBHandler.getAllFromDB();
 		frame = new JFrame("Forma-1 pilóták");
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
