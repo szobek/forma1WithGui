@@ -2,9 +2,11 @@ package forma1;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class DBHandler {
 	
@@ -27,12 +29,28 @@ public class DBHandler {
 			ResultSet rs = stmt.executeQuery("select * from test");
 			while (rs.next())
 				System.out.println(rs.getString("name") + "  ");
-			con.close();
+		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+	}
+	public static void insertAllToDb(List<Pilota> pilots) {
+		try (Connection con = connectToDb()){
+			 Statement statement = con.createStatement();
+	            statement.executeUpdate("truncate table test");
+			String query = "INSERT into test " + "VALUES (?)";
+			PreparedStatement preparedStmt = con.prepareStatement(query);
+			
+			for (Pilota pilota: pilots) {
+			    preparedStmt.setString (1, pilota.getName());
+			    preparedStmt.executeUpdate();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

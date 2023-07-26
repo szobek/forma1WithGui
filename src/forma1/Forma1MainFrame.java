@@ -212,6 +212,13 @@ public class Forma1MainFrame {
 		});
 		mnTasks.add(mntmWriteCsv);
 		mnTasks.add(mntmExit);
+		
+		JMenu mnNewMenu = new JMenu("Egyéb");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Adatok db-be");
+		mnNewMenu.add(mntmNewMenuItem);
+		DBHandler.insertAllToDb(pilots);
 
 	}
 
@@ -335,5 +342,4 @@ public class Forma1MainFrame {
 	public int listSize() {
 		return pilots.size();
 	}
-	
 }
