@@ -19,11 +19,11 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ItemListener;
 
 import java.awt.event.ItemEvent;
-import javax.swing.JCheckBox;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
@@ -39,7 +39,7 @@ public class Forma1MainFrame {
 	Object[][] tableData;
 	private JFrame frame;
 	private JTable table;
-	private final JComboBox comboBox = new JComboBox();
+	private final JComboBox<String> comboBox = new JComboBox<String>();
 	private JLabel lblRowCount;
 	private JLabel lblSelectedNation;
 
@@ -129,7 +129,7 @@ public class Forma1MainFrame {
 		table.setRowHeight(40);
 
 		comboBox.setToolTipText("Nemzetiség");
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "Mind", "GBR", "GER", "ITA " }));
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Mind", "GBR", "GER", "ITA " }));
 		comboBox.setBounds(91, 644, 108, 30);
 		frame.getContentPane().add(comboBox);
 
