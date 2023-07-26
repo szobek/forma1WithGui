@@ -16,7 +16,7 @@ public class DBHandler {
 		Connection con =null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "a");
 			
 		} catch (Exception e) {
 			System.out.println(e);
@@ -25,35 +25,47 @@ public class DBHandler {
 	}
 	
 	public static void getAllFromDB() {
-		 
-		try (Connection con = connectToDb()){
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from test");
-			while (rs.next())
-				System.out.println(rs.getString("name") + "  ");
 		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Connection con = connectToDb();
+	 if(con!=null) {
+		 try  {
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery("select * from test");
+				while (rs.next())
+					System.out.println(rs.getString("name") + "  ");
+			
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Nem sikerült csatlakozni a db-hez");
+			}
+	 }else {
+		 JOptionPane.showMessageDialog(null, "Nem sikerült csatlakozni a db-hez");
+	 }
+		
 		
 	}
 	public static void insertAllToDb(List<Pilota> pilots) {
-		try (Connection con = connectToDb()){
-			 Statement statement = con.createStatement();
-	            statement.executeUpdate("truncate table test");
-			String query = "INSERT into test " + "VALUES (?)";
-			PreparedStatement preparedStmt = con.prepareStatement(query);
-			
-			for (Pilota pilota: pilots) {
-			    preparedStmt.setString (1, pilota.getName());
-			    preparedStmt.executeUpdate();
-			}
-			JOptionPane.showMessageDialog(null, "DB-be írás kész!");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Connection con = connectToDb();
+		if (con!=null) {
+			try {
+				 Statement statement = con.createStatement();
+		            statement.executeUpdate("truncate table test");
+				String query = "INSERT into test " + "VALUES (?)";
+				PreparedStatement preparedStmt = con.prepareStatement(query);
+				
+				for (Pilota pilota: pilots) {
+				    preparedStmt.setString (1, pilota.getName());
+				    preparedStmt.executeUpdate();
+				}
+				JOptionPane.showMessageDialog(null, "DB-be írás kész!");
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Nem sikerült csatlakozni a db-hez");
+			}	
+		} else {
+			JOptionPane.showMessageDialog(null, "Nem sikerült csatlakozni a db-hez");
 		}
+		
 	}
+	
+	
 
 }
