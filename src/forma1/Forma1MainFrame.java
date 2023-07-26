@@ -74,7 +74,7 @@ public class Forma1MainFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		DBHandler.getAllFromDB();
+		
 		frame = new JFrame("Forma-1 pilóták");
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -217,8 +217,13 @@ public class Forma1MainFrame {
 		menuBar.add(mnNewMenu);
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Adatok db-be");
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DBHandler.insertAllToDb(pilots);
+			}
+		});
 		mnNewMenu.add(mntmNewMenuItem);
-		DBHandler.insertAllToDb(pilots);
+		
 
 	}
 

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class DBHandler {
 	
 	private static Connection  connectToDb() {
@@ -47,6 +49,7 @@ public class DBHandler {
 			    preparedStmt.setString (1, pilota.getName());
 			    preparedStmt.executeUpdate();
 			}
+			JOptionPane.showMessageDialog(null, "DB-be írás kész!");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
