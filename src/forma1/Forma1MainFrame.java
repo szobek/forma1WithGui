@@ -31,6 +31,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
@@ -164,7 +165,9 @@ public class Forma1MainFrame {
 		table.setAutoCreateRowSorter(true);
 
 		createMenu();
-
+		frame.setResizable(false);
+		frame.setIconImage(new ImageIcon(this.getClass().getResource("/forma1_auto.png")).getImage());
+		
 	}
 
 	private void createMenu() {
