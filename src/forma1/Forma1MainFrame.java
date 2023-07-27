@@ -88,7 +88,7 @@ public class Forma1MainFrame {
 
 		createRows();
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 818, 584);
+		scrollPane.setBounds(10, 11, 429, 441);
 		frame.getContentPane().add(scrollPane);
 		tableModel = new DefaultTableModel(tableData, columnNames);
 		table = new JTable(tableModel) {
@@ -131,29 +131,30 @@ public class Forma1MainFrame {
 		table.setRowHeight(40);
 
 		comboBox.setToolTipText("Nemzetiség");
-		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Mind", "GBR", "GER", "ITA " }));
-		comboBox.setBounds(91, 644, 108, 30);
+		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Mind", "GBR", "GER", "ITA" }));
+		comboBox.setBounds(500, 36, 108, 30);
 		frame.getContentPane().add(comboBox);
 
 		JLabel lblNewLabel = new JLabel("A választott: ");
-		lblNewLabel.setBounds(65, 619, 88, 14);
+		lblNewLabel.setBounds(474, 11, 88, 14);
 		frame.getContentPane().add(lblNewLabel);
 
 		lblSelectedNation = new JLabel("");
-		lblSelectedNation.setBounds(165, 619, 46, 14);
+		lblSelectedNation.setBounds(574, 11, 46, 14);
 		frame.getContentPane().add(lblSelectedNation);
 
 		JLabel lblRowCountText = new JLabel("A sorok száma: ");
-		lblRowCountText.setBounds(628, 606, 131, 30);
+		lblRowCountText.setBounds(278, 463, 131, 30);
 		frame.getContentPane().add(lblRowCountText);
 
 		lblRowCount = new JLabel("");
-		lblRowCount.setBounds(769, 606, 59, 37);
+		lblRowCount.setBounds(371, 463, 59, 37);
 		frame.getContentPane().add(lblRowCount);
 
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == 1) {
+					System.out.println(e.getItem().toString()+"//////////****************");
 					lblSelectedNation.setText(e.getItem().toString());
 					createRowsByFilter(e.getItem().toString());
 				}
