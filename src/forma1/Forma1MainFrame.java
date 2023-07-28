@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -32,9 +32,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.net.URL;
+
 import java.awt.Color;
-import java.awt.Component;
+
 import java.awt.Font;
 
 public class Forma1MainFrame {
@@ -110,7 +110,7 @@ public class Forma1MainFrame {
 			
 			
 		};
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		table.setToolTipText("Pilóták");
 
 		ListSelectionModel select = table.getSelectionModel();
@@ -168,7 +168,7 @@ public class Forma1MainFrame {
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == 1) {
-					System.out.println(e.getItem().toString()+"//////////****************");
+					
 					lblSelectedNation.setText(e.getItem().toString());
 					createRowsByFilter(e.getItem().toString());
 				}
@@ -185,6 +185,11 @@ public class Forma1MainFrame {
 		frame.setIconImage(new ImageIcon(this.getClass().getResource("/forma1_auto.png")).getImage());
 		
 	}
+	
+	/**
+	 * create menu just in another methode
+	 * 
+	 */
 
 	private void createMenu() {
 
@@ -241,6 +246,11 @@ public class Forma1MainFrame {
 		
 
 	}
+	
+	/**
+	 * remove all rows from table and return count rows
+	 * @return integer
+	 */
 
 	public int removeAllRows() {
 		DefaultTableModel dm = (DefaultTableModel) table.getModel();
@@ -250,7 +260,10 @@ public class Forma1MainFrame {
 		}
 		return dm.getRowCount();
 	}
-
+/**
+ * create one row in to table with pilot fields
+ * @param pilota
+ */
 	private void createOneRow(Pilota pilota) {
 		Object[] row = new Object[4];
 		row[0] = pilota.getName();
@@ -261,6 +274,10 @@ public class Forma1MainFrame {
 		tableModel.addRow(row);
 	}
 
+	/**
+	 * create rows if initialize app
+	 * 
+	 */
 	private void createRows() {
 
 		for (int i = 0; i < pilots.size(); i++) {
@@ -273,6 +290,11 @@ public class Forma1MainFrame {
 		}
 
 	}
+	
+	/**
+	 * create row if equal nationcode with param
+	 * @param nation
+	 */
 
 	private void createRowsByFilter(String nation) {
 		removeAllRows();
@@ -288,10 +310,17 @@ public class Forma1MainFrame {
 		countTableRows();
 	}
 
+	
+	/**
+	 * just show the number of rows in label
+	 */
 	private void countTableRows() {
 		lblRowCount.setText(table.getRowCount() + "");
 	}
 
+	/**
+	 * the table first column text align center
+	 */
 	private void firstColTextCenter() {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -299,6 +328,12 @@ public class Forma1MainFrame {
 
 	}
 
+	
+	/**
+	 * select image url by natiocode
+	 * @param nation
+	 * @return String
+	 */
 	private String selectFlagByNation(String nation) {
 
 		String url = "";
@@ -328,6 +363,10 @@ public class Forma1MainFrame {
 		return url;
 	}
 
+	
+	/**
+	 * filter if firstname start with "h"
+	 */
 	private void nameStartWithH() {
 		removeAllRows();
 		for (int i = 0; i < pilots.size(); i++) {
@@ -336,7 +375,9 @@ public class Forma1MainFrame {
 			}
 		}
 	}
-
+/**
+ * Create all row to table
+ */
 	private void createAllRow() {
 		for (int i = 0; i < pilots.size(); i++) {
 
@@ -344,6 +385,10 @@ public class Forma1MainFrame {
 
 		}
 	}
+	
+	/**
+	 * exit method,before question
+	 */
 	
 	private void exit() {
 		if(JOptionPane.showConfirmDialog(frame, "Biztos kilép?", "Kilépés", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
