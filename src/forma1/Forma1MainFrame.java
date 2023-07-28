@@ -47,6 +47,8 @@ public class Forma1MainFrame {
 	private final JComboBox<String> comboBox = new JComboBox<String>();
 	private JLabel lblRowCount;
 	private JLabel lblSelectedNation;
+	private JScrollPane scrollPane;
+	private JLabel lblRowCountText;
 
 	/**
 	 * Launch the application.
@@ -78,23 +80,19 @@ public class Forma1MainFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+
 		frame = new JFrame("Forma-1 pilóták");
-		frame.getContentPane().setBackground(new Color(0, 153, 204));
-		frame.setBackground(new Color(51, 153, 204));
+
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				exit();
 			}
 		});
-		frame.setBounds(100, 100, 885, 743);
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
 
 		createRows();
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 429, 441);
+		scrollPane = new JScrollPane();
+
 		frame.getContentPane().add(scrollPane);
 		tableModel = new DefaultTableModel(tableData, columnNames);
 		table = new JTable(tableModel) {
@@ -107,15 +105,10 @@ public class Forma1MainFrame {
 			public Class getColumnClass(int column) {
 				return (column == 3) ? Icon.class : Object.class;
 			}
-			
-			
+
 		};
-		
-		table.setToolTipText("Pilóták");
 
 		ListSelectionModel select = table.getSelectionModel();
-		table.setBackground(new Color(144,238,144));
-		table.setSelectionBackground(new Color(0, 204, 255));
 		select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		select.addListSelectionListener(new ListSelectionListener() {
 
@@ -137,9 +130,6 @@ public class Forma1MainFrame {
 
 		firstColTextCenter();
 		scrollPane.setViewportView(table);
-
-		table.setRowHeight(40);
-
 		comboBox.setToolTipText("Nemzetiség");
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Mind", "GBR", "GER", "ITA" }));
 		comboBox.setBounds(500, 36, 108, 30);
@@ -153,22 +143,18 @@ public class Forma1MainFrame {
 		lblSelectedNation.setBounds(574, 11, 46, 14);
 		frame.getContentPane().add(lblSelectedNation);
 
-		JLabel lblRowCountText = new JLabel("A sorok száma: ");
-		lblRowCountText.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblRowCountText.setForeground(new Color(255, 255, 255));
-		lblRowCountText.setBounds(278, 463, 131, 30);
+		lblRowCountText = new JLabel("A sorok száma: ");
+		
 		frame.getContentPane().add(lblRowCountText);
 
 		lblRowCount = new JLabel("");
-		lblRowCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblRowCount.setForeground(new Color(255, 255, 255));
-		lblRowCount.setBounds(391, 463, 59, 37);
+		
 		frame.getContentPane().add(lblRowCount);
 
 		comboBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == 1) {
-					
+
 					lblSelectedNation.setText(e.getItem().toString());
 					createRowsByFilter(e.getItem().toString());
 				}
@@ -177,18 +163,46 @@ public class Forma1MainFrame {
 		lblSelectedNation.setText("Mind");
 		countTableRows();
 
-		// enable sort
-		table.setAutoCreateRowSorter(true);
 
 		createMenu();
+		setDetails();
+	}
+
+	/**
+	 * set component details,like background, bound,etc
+	 */
+	private void setDetails() {
+		frame.setBounds(100, 100, 885, 743);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setBackground(new Color(0, 153, 204));
+		frame.setBackground(new Color(51, 153, 204));
 		frame.setResizable(false);
 		frame.setIconImage(new ImageIcon(this.getClass().getResource("/forma1_auto.png")).getImage());
+
+		table.setToolTipText("Pilóták");
+		table.setBackground(new Color(144, 238, 144));
+		table.setSelectionBackground(new Color(0, 204, 255));
+		table.setRowHeight(40);
+
+		// enable sort
+		table.setAutoCreateRowSorter(true);
 		
-		scrollPane.getViewport().setBackground(new Color(153,255,255));
+		
+		scrollPane.setBounds(10, 11, 429, 441);
+		scrollPane.getViewport().setBackground(new Color(153, 255, 255));
+
+		lblRowCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRowCount.setForeground(new Color(255, 255, 255));
+		lblRowCount.setBounds(391, 463, 59, 37);
+		
+		lblRowCountText.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRowCountText.setForeground(new Color(255, 255, 255));
+		lblRowCountText.setBounds(278, 463, 131, 30);
 	}
-	
+
 	/**
-	 * create menu just in another methode
+	 * create menu just in another method
 	 * 
 	 */
 
@@ -220,11 +234,11 @@ public class Forma1MainFrame {
 		JMenuItem mntmExit = new JMenuItem("Kilépés");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				exit();
 			}
 		});
-		
+
 		JMenuItem mntmWriteCsv = new JMenuItem("csv írása");
 		mntmWriteCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -233,10 +247,10 @@ public class Forma1MainFrame {
 		});
 		mnTasks.add(mntmWriteCsv);
 		mnTasks.add(mntmExit);
-		
+
 		JMenu mnNewMenu = new JMenu("Egyéb");
 		menuBar.add(mnNewMenu);
-		
+
 		JMenuItem mntmNewMenuItem = new JMenuItem("Adatok db-be");
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -244,12 +258,12 @@ public class Forma1MainFrame {
 			}
 		});
 		mnNewMenu.add(mntmNewMenuItem);
-		
 
 	}
-	
+
 	/**
 	 * remove all rows from table and return count rows
+	 * 
 	 * @return integer
 	 */
 
@@ -261,10 +275,12 @@ public class Forma1MainFrame {
 		}
 		return dm.getRowCount();
 	}
-/**
- * create one row in to table with pilot fields
- * @param pilota
- */
+
+	/**
+	 * create one row in to table with pilot fields
+	 * 
+	 * @param pilota
+	 */
 	private void createOneRow(Pilota pilota) {
 		Object[] row = new Object[4];
 		row[0] = pilota.getName();
@@ -291,9 +307,10 @@ public class Forma1MainFrame {
 		}
 
 	}
-	
+
 	/**
 	 * create row if equal nationcode with param
+	 * 
 	 * @param nation
 	 */
 
@@ -311,7 +328,6 @@ public class Forma1MainFrame {
 		countTableRows();
 	}
 
-	
 	/**
 	 * just show the number of rows in label
 	 */
@@ -329,9 +345,9 @@ public class Forma1MainFrame {
 
 	}
 
-	
 	/**
 	 * select image url by natiocode
+	 * 
 	 * @param nation
 	 * @return String
 	 */
@@ -364,7 +380,6 @@ public class Forma1MainFrame {
 		return url;
 	}
 
-	
 	/**
 	 * filter if firstname start with "h"
 	 */
@@ -376,9 +391,10 @@ public class Forma1MainFrame {
 			}
 		}
 	}
-/**
- * Create all row to table
- */
+
+	/**
+	 * Create all row to table
+	 */
 	private void createAllRow() {
 		for (int i = 0; i < pilots.size(); i++) {
 
@@ -386,25 +402,25 @@ public class Forma1MainFrame {
 
 		}
 	}
-	
+
 	/**
 	 * exit method,before question
 	 */
-	
+
 	private void exit() {
-		if(JOptionPane.showConfirmDialog(frame, "Biztos kilép?", "Kilépés", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+		if (JOptionPane.showConfirmDialog(frame, "Biztos kilép?", "Kilépés",
+				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			System.exit(0);
-		}		
+		}
 	}
-	
+
 	// to tests
-	
-	
+
 	public String getFrameTitle() {
-		
+
 		return frame.getTitle();
 	}
-	
+
 	public int listSize() {
 		return pilots.size();
 	}
