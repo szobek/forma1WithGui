@@ -184,6 +184,7 @@ public class Forma1MainFrame {
 		frame.setResizable(false);
 		frame.setIconImage(new ImageIcon(this.getClass().getResource("/forma1_auto.png")).getImage());
 		
+		scrollPane.getViewport().setBackground(new Color(153,255,255));
 	}
 	
 	/**
