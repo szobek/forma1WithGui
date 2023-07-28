@@ -13,6 +13,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -32,6 +33,9 @@ import javax.swing.JMenuItem;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
@@ -76,6 +80,8 @@ public class Forma1MainFrame {
 	private void initialize() {
 		
 		frame = new JFrame("Forma-1 pilóták");
+		frame.getContentPane().setBackground(new Color(0, 153, 204));
+		frame.setBackground(new Color(51, 153, 204));
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -101,11 +107,15 @@ public class Forma1MainFrame {
 			public Class getColumnClass(int column) {
 				return (column == 3) ? Icon.class : Object.class;
 			}
+			
+			
 		};
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setToolTipText("Pilóták");
 
 		ListSelectionModel select = table.getSelectionModel();
+		table.setBackground(new Color(144,238,144));
+		table.setSelectionBackground(new Color(0, 204, 255));
 		select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		select.addListSelectionListener(new ListSelectionListener() {
 
@@ -144,11 +154,15 @@ public class Forma1MainFrame {
 		frame.getContentPane().add(lblSelectedNation);
 
 		JLabel lblRowCountText = new JLabel("A sorok száma: ");
+		lblRowCountText.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRowCountText.setForeground(new Color(255, 255, 255));
 		lblRowCountText.setBounds(278, 463, 131, 30);
 		frame.getContentPane().add(lblRowCountText);
 
 		lblRowCount = new JLabel("");
-		lblRowCount.setBounds(371, 463, 59, 37);
+		lblRowCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblRowCount.setForeground(new Color(255, 255, 255));
+		lblRowCount.setBounds(391, 463, 59, 37);
 		frame.getContentPane().add(lblRowCount);
 
 		comboBox.addItemListener(new ItemListener() {
