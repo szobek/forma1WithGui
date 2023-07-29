@@ -182,7 +182,7 @@ public class Forma1MainFrame {
 		lblRowCountText.setBounds(278, 463, 131, 30);
 		lblnameStart.setBounds(474, 105, 119, 14);
 
-		cmbNames.setModel(new DefaultComboBoxModel<String>(new String[] { "Mind","a", "b", "c", "d", "e", "f", "g", "h", "i",
+		cmbNames.setModel(new DefaultComboBoxModel<String>(new String[] { "Összes","a", "b", "c", "d", "e", "f", "g", "h", "i",
 				"j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
 		cmbNames.setBounds(503, 144, 76, 22);
 
@@ -347,11 +347,12 @@ public class Forma1MainFrame {
 	 */
 
 	private void createRowsByFilter(String nation) {
+		
 		removeAllRows();
 		if (nation.equals("Mind")) {
 			nation = "";
 		}
-
+		cmbNames.setSelectedItem("Összes");
 		for (int i = 0; i < pilots.size(); i++) {
 			if (pilots.get(i).getNationCode().contains(nation)) {
 				createOneRow(pilots.get(i));
@@ -416,6 +417,7 @@ public class Forma1MainFrame {
 	 * filter if firstname start with param
 	 */
 	private void nameStartWith(String start) {
+		comboBox.setSelectedItem("Mind");		
 		removeAllRows();
 		if (start.equals("Mind")) {
 			start = "";
@@ -426,6 +428,7 @@ public class Forma1MainFrame {
 			}
 		}
 		countTableRows();
+
 	}
 
 	/**
