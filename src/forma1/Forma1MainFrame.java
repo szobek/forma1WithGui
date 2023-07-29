@@ -49,6 +49,8 @@ public class Forma1MainFrame {
 	private JLabel lblSelectedNation;
 	private JScrollPane scrollPane;
 	private JLabel lblRowCountText;
+	private JLabel lblnameStart;
+	private JComboBox<String> cmbNames;
 
 	/**
 	 * Launch the application.
@@ -144,11 +146,11 @@ public class Forma1MainFrame {
 		frame.getContentPane().add(lblSelectedNation);
 
 		lblRowCountText = new JLabel("A sorok száma: ");
-		
+
 		frame.getContentPane().add(lblRowCountText);
 
 		lblRowCount = new JLabel("");
-		
+
 		frame.getContentPane().add(lblRowCount);
 
 		comboBox.addItemListener(new ItemListener() {
@@ -161,8 +163,20 @@ public class Forma1MainFrame {
 			}
 		});
 		lblSelectedNation.setText("Mind");
-		countTableRows();
+		lblnameStart = new JLabel("Szűrés betű alapján");
+		cmbNames = new JComboBox<String>();
+		cmbNames.addItemListener(new ItemListener() {
 
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == 1) {
+					nameStartWith(e.getItem().toString());
+
+				}
+			}
+		});
+		frame.getContentPane().add(cmbNames);
+		countTableRows();
 
 		createMenu();
 		setDetails();
@@ -187,18 +201,24 @@ public class Forma1MainFrame {
 
 		// enable sort
 		table.setAutoCreateRowSorter(true);
-		
-		
+
 		scrollPane.setBounds(10, 11, 429, 441);
 		scrollPane.getViewport().setBackground(new Color(153, 255, 255));
 
 		lblRowCount.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblRowCount.setForeground(new Color(255, 255, 255));
 		lblRowCount.setBounds(391, 463, 59, 37);
-		
+
 		lblRowCountText.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblRowCountText.setForeground(new Color(255, 255, 255));
 		lblRowCountText.setBounds(278, 463, 131, 30);
+		lblnameStart.setBounds(474, 105, 119, 14);
+
+		cmbNames.setModel(new DefaultComboBoxModel<String>(new String[] { "Mind","a", "b", "c", "d", "e", "f", "g", "h", "i",
+				"j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
+		cmbNames.setBounds(503, 144, 76, 22);
+
+		frame.getContentPane().add(lblnameStart);
 	}
 
 	/**
@@ -217,7 +237,7 @@ public class Forma1MainFrame {
 		JMenuItem mntmNameStartsH = new JMenuItem("H betűs vezetéknevek");
 		mntmNameStartsH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nameStartWithH();
+				nameStartWith("H");
 			}
 		});
 		mnTasks.add(mntmNameStartsH);
@@ -381,15 +401,19 @@ public class Forma1MainFrame {
 	}
 
 	/**
-	 * filter if firstname start with "h"
+	 * filter if firstname start with param
 	 */
-	private void nameStartWithH() {
+	private void nameStartWith(String start) {
 		removeAllRows();
+		if (start.equals("Mind")) {
+			start = "";
+		}
 		for (int i = 0; i < pilots.size(); i++) {
-			if (pilots.get(i).getName().split(" ")[1].startsWith("H")) {
+			if (pilots.get(i).getName().split(" ")[1].charAt(0) == start.toUpperCase().charAt(0)) {
 				createOneRow(pilots.get(i));
 			}
 		}
+		countTableRows();
 	}
 
 	/**
