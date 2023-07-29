@@ -40,8 +40,8 @@ import java.awt.Font;
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
 	private List<Pilota> pilots = new ArrayList<Pilota>();
-	String[] columnNames = { "Név", "Rajtszám", "Nemzetiség", "Zászló" };
-	Object[][] tableData;
+	private final String[] columnNames = { "Név", "Rajtszám", "Nemzetiség", "Zászló" };
+	private Object[][] tableData;
 	private JFrame frame;
 	private JTable table;
 	private final JComboBox<String> comboBox = new JComboBox<String>();
@@ -51,7 +51,7 @@ public class Forma1MainFrame {
 	private JLabel lblRowCountText;
 	private JLabel lblnameStart;
 	private JComboBox<String> cmbNames;
-
+	private ListSelectionModel select ;
 	/**
 	 * Launch the application.
 	 */
@@ -72,6 +72,7 @@ public class Forma1MainFrame {
 	 * Create the application.
 	 */
 	public Forma1MainFrame() {
+		
 		FileHandler.readCsv(pilots);
 
 		tableData = new Object[pilots.size()][columnNames.length];
@@ -110,26 +111,9 @@ public class Forma1MainFrame {
 
 		};
 
-		ListSelectionModel select = table.getSelectionModel();
+		select = table.getSelectionModel();
 		select.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		select.addListSelectionListener(new ListSelectionListener() {
-
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-
-				if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
-
-					StringBuilder row = new StringBuilder();
-					row.append("Név: " + table.getModel().getValueAt(table.getSelectedRow(), 0).toString() + " ");
-					row.append("rajtszám: " + table.getModel().getValueAt(table.getSelectedRow(), 1).toString() + " ");
-
-					row.append("országkód: " + table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
-
-					JOptionPane.showMessageDialog(frame, row, "adatok", JOptionPane.PLAIN_MESSAGE, null);
-				}
-			}
-		});
-
+		
 		firstColTextCenter();
 		scrollPane.setViewportView(table);
 		comboBox.setToolTipText("Nemzetiség");
@@ -153,33 +137,17 @@ public class Forma1MainFrame {
 
 		frame.getContentPane().add(lblRowCount);
 
-		comboBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == 1) {
-
-					lblSelectedNation.setText(e.getItem().toString());
-					createRowsByFilter(e.getItem().toString());
-				}
-			}
-		});
+		
 		lblSelectedNation.setText("Mind");
 		lblnameStart = new JLabel("Szűrés betű alapján");
 		cmbNames = new JComboBox<String>();
-		cmbNames.addItemListener(new ItemListener() {
-
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == 1) {
-					nameStartWith(e.getItem().toString());
-
-				}
-			}
-		});
+		
 		frame.getContentPane().add(cmbNames);
 		countTableRows();
 
 		createMenu();
 		setDetails();
+		setListeners();
 	}
 
 	/**
@@ -219,6 +187,50 @@ public class Forma1MainFrame {
 		cmbNames.setBounds(503, 144, 76, 22);
 
 		frame.getContentPane().add(lblnameStart);
+	}
+	
+	private void setListeners() {
+		cmbNames.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == 1) {
+					nameStartWith(e.getItem().toString());
+
+				}
+			}
+		});
+		
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == 1) {
+
+					lblSelectedNation.setText(e.getItem().toString());
+					createRowsByFilter(e.getItem().toString());
+				}
+			}
+		});
+		
+		select.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+
+				if (!e.getValueIsAdjusting() && table.getSelectedRow() != -1) {
+
+					StringBuilder row = new StringBuilder();
+					row.append("Név: " + table.getModel().getValueAt(table.getSelectedRow(), 0).toString() + " ");
+					row.append("rajtszám: " + table.getModel().getValueAt(table.getSelectedRow(), 1).toString() + " ");
+
+					row.append("országkód: " + table.getModel().getValueAt(table.getSelectedRow(), 2).toString());
+
+					JOptionPane.showMessageDialog(frame, row, "adatok", JOptionPane.PLAIN_MESSAGE, null);
+				}
+			}
+		});
+
+		
+		
 	}
 
 	/**
