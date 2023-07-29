@@ -22,8 +22,10 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -446,7 +448,9 @@ public class Forma1MainFrame {
 	 * exit method,before question
 	 */
 
-	private void exit() {
+	private void exit() { 
+		UIManager.put("OptionPane.background", new Color(255,114,118));
+		UIManager.put("Panel.background",new Color(255,114,118));
 		if (JOptionPane.showConfirmDialog(frame, "Biztos kilép?", "Kilépés",
 				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 			System.exit(0);
