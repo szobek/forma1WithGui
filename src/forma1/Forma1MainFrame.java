@@ -38,7 +38,7 @@ import java.awt.event.WindowEvent;
 import java.awt.Color;
 
 import java.awt.Font;
-
+ 
 public class Forma1MainFrame {
 	private DefaultTableModel tableModel;
 	private List<Pilota> pilots = new ArrayList<Pilota>();
