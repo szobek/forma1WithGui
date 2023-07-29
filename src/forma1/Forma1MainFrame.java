@@ -184,7 +184,7 @@ public class Forma1MainFrame {
 		lblRowCountText.setBounds(278, 463, 131, 30);
 		lblnameStart.setBounds(474, 105, 119, 14);
 
-		cmbNames.setModel(new DefaultComboBoxModel<String>(new String[] { "Összes","a", "b", "c", "d", "e", "f", "g", "h", "i",
+		cmbNames.setModel(new DefaultComboBoxModel<String>(new String[] { "Mindegyik","a", "b", "c", "d", "e", "f", "g", "h", "i",
 				"j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" }));
 		cmbNames.setBounds(503, 144, 76, 22);
 
@@ -354,7 +354,7 @@ public class Forma1MainFrame {
 		if (nation.equals("Mind")) {
 			nation = "";
 		}
-		cmbNames.setSelectedItem("Összes");
+		//cmbNames.setSelectedItem("Mindegyik");
 		for (int i = 0; i < pilots.size(); i++) {
 			if (pilots.get(i).getNationCode().contains(nation)) {
 				createOneRow(pilots.get(i));
@@ -419,13 +419,11 @@ public class Forma1MainFrame {
 	 * filter if firstname start with param
 	 */
 	private void nameStartWith(String start) {
-		comboBox.setSelectedItem("Mind");		
+		//comboBox.setSelectedItem("Mind");		
 		removeAllRows();
-		if (start.equals("Mind")) {
-			start = "";
-		}
+		
 		for (int i = 0; i < pilots.size(); i++) {
-			if (pilots.get(i).getName().split(" ")[1].charAt(0) == start.toUpperCase().charAt(0)) {
+			if (start.equals("Mindegyik")|| pilots.get(i).getName().split(" ")[1].charAt(0) == start.toUpperCase().charAt(0)) {
 				createOneRow(pilots.get(i));
 			}
 		}
